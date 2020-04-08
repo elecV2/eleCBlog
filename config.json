@@ -1,0 +1,12 @@
+{
+  "blog": "eleCBlog",
+  "header": {
+    "title": "eleCBlog - 一个博客",
+    "image": "./src/header.png"
+  },
+  "footer": {
+    "HOME": "./",
+    "ABOUT": "./about",
+    "Power BY eleCBlog": "https://github.com/elecV2/eleCBlog"
+  }
+}

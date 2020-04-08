@@ -1,6 +1,6 @@
 pre, code {
   font-size: 16px;
-  font-family: Roboto, 'Courier New', Consolas, Inconsolata, Courier, monospace;
+  font-family: Consolas, Inconsolata, Courier, monospace;
   margin: auto 5px;
 }
 
@@ -13,15 +13,21 @@ code {
 pre {
   font-size: 18px;
   line-height: 1.4em;
-  display: block; !important;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  color: #333;
+  background: #f8f8f8;
+  overflow-x: auto;
 }
 
 pre code {
-  white-space: pre;
-  overflow: auto;
-  border-radius: 3px;
-  padding: 1px 1px;
-  display: block !important;
+  display: block;
+  padding: 0;
+  white-space: pre-wrap;
+  background-color: transparent;
+  border-radius: 0;
 }
 
 strong, b{
@@ -38,7 +44,7 @@ hr {
 }
 
 p {
-  margin: 1.5em 5px !important;
+  margin: 1.5em 5px;
   word-break: break-all;
 }
 

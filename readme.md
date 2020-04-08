@@ -36,7 +36,7 @@
 
 想用 github 搭建一个简单的静态博客，发现 Jekyll/hexo 等都还是比较复杂，要 nodejs，要各种指令操作，最主要的是：.md 文件还要经过一定的修改，才能最终展现出来，很不友好。我希望的是写一份 .md 文件，拿到哪都能用，而不是被各种格式反复污染。
 
-## 引用参与
+## 引用参考
 
 - JS: [marked](https://github.com/markedjs/marked)
 - CSS: [markdownhere](https://gist.github.com/xiaolai/aa190255b7dde302d10208ae247fc9f2)

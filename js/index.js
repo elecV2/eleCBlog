@@ -1,87 +1,133 @@
-class eleCBlog {
-  _configpath = "./config.json";
-  _articlelists = "./post/_lists.json";
+"use strict";
 
-  _config = null;
-  _atlist = null;
+function _instanceof(left, right) { if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) { return !!right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 
-  constructor({ configpath, articlelists }){
+function _classCallCheck(instance, Constructor) { if (!_instanceof(instance, Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var eleCBlog = /*#__PURE__*/function () {
+  function eleCBlog(_ref) {
+    var configpath = _ref.configpath,
+        articlelists = _ref.articlelists;
+
+    _classCallCheck(this, eleCBlog);
+
+    _defineProperty(this, "_configpath", "./config.json");
+
+    _defineProperty(this, "_articlelists", "./post/lists.json");
+
+    _defineProperty(this, "_config", null);
+
+    _defineProperty(this, "_atlist", null);
+
     configpath ? this._configpath = configpath : null;
     articlelists ? this._articlelists = articlelists : null;
   }
 
-  async init(){
-    await fetch(this._configpath, {
-      headers: {
-        'content-type': 'application/json;charset=utf-8'
-      }
-    }).then(t=>t.json()).then(conf=>{
-      this._config = conf;
-      document.querySelector('.footer').innerHTML = ""
-      let footul = document.createElement("ul");
-      footul.className = "footer_ul";
-      for (let ft in conf.footer) {
-        let footli = document.createElement("li");
-        footli.className = 'footer_li';
-        footli.innerHTML = `<a class='footer_a' href="${conf.footer[ft]}">${ft}</a>`;
-        footul.appendChild(footli);
-      }
-      document.querySelector('.footer').appendChild(footul);
-    })
+  _createClass(eleCBlog, [{
+    key: "init",
+    value: async function init() {
+      var _this = this;
 
-    await fetch(this._articlelists, {
-      headers: {
-        'content-type': 'application/json;charset=utf-8'
-      }
-    }).then(t=>t.json()).then(conf=>{
-      this._atlist = conf;
-    })
-  }
+      await fetch(this._configpath, {
+        headers: {
+          'content-type': 'application/json;charset=UTF-8'
+        }
+      }).then(function (t) {
+        return t.json();
+      }).then(function (conf) {
+        _this._config = conf;
+        document.querySelector('.footer').innerHTML = "";
+        var footul = document.createElement("ul");
+        footul.className = "footer_ul";
 
-  index(){
-    if (this._config.header.image) {
-      document.querySelector(".header").style.background = `url(${this._config.header.image})`;
+        for (var ft in conf.footer) {
+          var footli = document.createElement("li");
+          footli.className = 'footer_li';
+          footli.innerHTML = "<a class='footer_a' href=\"".concat(conf.footer[ft], "\">").concat(ft, "</a>");
+          footul.appendChild(footli);
+        }
+
+        document.querySelector('.footer').appendChild(footul);
+      });
+      await fetch(this._articlelists, {
+        headers: {
+          'content-type': 'application/json;charset=UTF-8'
+        }
+      }).then(function (t) {
+        return t.json();
+      }).then(function (conf) {
+        _this._atlist = conf;
+      });
     }
-    document.title = this._config.header.title;
-    document.querySelector(".header_title").innerHTML = this._config.header.title;
+  }, {
+    key: "index",
+    value: function index() {
+      if (this._config.header.image) {
+        document.querySelector(".header").style.background = "url(".concat(this._config.header.image, ")");
+      }
 
-    let listul = document.createElement("ul");
-    listul.className = 'articlelists';
-    this._atlist.forEach(li=>{
-      let listli = document.createElement("li");
-      listli.className = 'articletitle';
-      listli.innerHTML = `<a target="_blank" href="./${encodeURI(li)}">${li}</a>`;
-      listul.appendChild(listli);
-    })
-    document.querySelector('.main').appendChild(listul);
-  }
+      document.title = this._config.header.title;
+      document.querySelector(".header_title").innerHTML = this._config.header.title;
+      var listul = document.createElement("ul");
+      listul.className = 'articlelists';
 
-  render(){
-    let mdpath = location.pathname.slice(1);
-    let mdname = decodeURI(mdpath);
-    document.querySelector('.main').innerHTML = "";
-    if (mdpath) {
-      fetch("./post/" + mdname + '.md').then(res=>res.text()).then(text=>{
-        document.title = mdname;
-        document.querySelector('.header_title').innerHTML = mdname;
-        document.querySelector('.main').innerHTML = marked(text);
-      }).catch(err=>{
-        console.error("loading error:", err);
+      this._atlist.forEach(function (li) {
+        var listli = document.createElement("li");
+        listli.className = 'articletitle';
+        listli.innerHTML = "<a target=\"_blank\" href=\"./".concat(encodeURI(li), "\">").concat(li, "</a>");
+        listul.appendChild(listli);
+      });
+
+      document.querySelector('.main').appendChild(listul);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var mdpath = location.pathname.slice(1);
+      var mdname = decodeURI(mdpath);
+      document.querySelector('.main').innerHTML = "";
+
+      if (mdpath) {
+        fetch("./post/" + mdname + '.md', {
+          headers: {
+            'content-type': 'text/plain;charset=UTF-8'
+          }
+        }).then(function (res) {
+          return res.text();
+        }).then(function (text) {
+          document.title = mdname;
+          document.querySelector('.header_title').innerHTML = mdname;
+          document.querySelector('.main').innerHTML = marked(text);
+        }).catch(function (err) {
+          console.error("loading error:", err);
+
+          _this2.index();
+        });
+      } else {
         this.index();
-      })
-    } else {
-      this.index();
+      }
     }
-  }
+  }, {
+    key: "start",
+    value: async function start() {
+      await this.init();
+      this.render();
+    }
+  }]);
 
-  async start(){
-    await this.init();
-    this.render();
-  }
-}
+  return eleCBlog;
+}();
 
-let b = new eleCBlog({
+var b = new eleCBlog({
   configpath: "./config.json",
-  articlelists: "./post/_lists.json",
+  articlelists: "./post/lists.json"
 });
 b.start();

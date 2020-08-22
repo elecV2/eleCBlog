@@ -1,1 +1,139 @@
-"use strict";var _createClass=function(){function a(c,d){for(var g,f=0;f<d.length;f++)g=d[f],g.enumerable=g.enumerable||!1,g.configurable=!0,"value"in g&&(g.writable=!0),Object.defineProperty(c,g.key,g)}return function(c,d,f){return d&&a(c.prototype,d),f&&a(c,f),c}}();function _asyncToGenerator(a){return function(){var c=a.apply(this,arguments);return new Promise(function(d,f){function g(h,j){try{var k=c[h](j),l=k.value}catch(m){return void f(m)}return k.done?void d(l):Promise.resolve(l).then(function(m){g("next",m)},function(m){g("throw",m)})}return g("next")})}}function _classCallCheck(a,c){if(!(a instanceof c))throw new TypeError("Cannot call a class as a function")}var eleCBlog=function(){function a(c){var d=c.configpath,f=c.articlelists;_classCallCheck(this,a),this._configpath="./config.json",this._articlelists="./post/lists.json",this._config=null,this._atlist=null,d?this._configpath=d:null,f?this._articlelists=f:null}return _createClass(a,[{key:"init",value:function(){var d=_asyncToGenerator(regeneratorRuntime.mark(function f(){var g=this;return regeneratorRuntime.wrap(function(j){for(;;)switch(j.prev=j.next){case 0:return j.next=2,fetch(this._configpath,{headers:{"content-type":"application/json;charset=UTF-8"}}).then(function(k){return k.json()}).then(function(k){g._config=k,document.querySelector(".footer").innerHTML="";var l=document.createElement("ul");for(var m in l.className="footer_ul",k.footer){var n=document.createElement("li");n.className="footer_li",n.innerHTML="<a class='footer_a' href=\""+k.footer[m]+"\">"+m+"</a>",l.appendChild(n)}document.querySelector(".footer").appendChild(l)}).catch(function(k){console.error(k),document.querySelector("main").innerHTML("init data error, check the new version <a href=\"https://github.com/elecV2/eleCBlog\">eleCBlog</a>")});case 2:return j.next=4,fetch(this._articlelists,{headers:{"content-type":"application/json;charset=UTF-8"}}).then(function(k){return k.json()}).then(function(k){g._atlist=k}).catch(function(k){console.error(k),document.querySelector("main").innerHTML("init data error, check the new version <a href=\"https://github.com/elecV2/eleCBlog\">eleCBlog</a>")});case 4:case"end":return j.stop();}},f,this)}));return function(){return d.apply(this,arguments)}}()},{key:"index",value:function index(){this._config.header.image&&(document.querySelector(".header").style.background="url("+this._config.header.image+")"),document.title=this._config.header.title,document.querySelector(".header_title").innerHTML=this._config.header.title;var c=document.createElement("ul");c.className="articlelists",this._atlist.forEach(function(d){var f=document.createElement("li");f.className="articletitle",f.innerHTML="<a target=\"_blank\" href=\"/#"+encodeURI(d)+"\">"+d+"</a>",c.appendChild(f)}),document.querySelector(".main").appendChild(c)}},{key:"render",value:function render(){var c=this,d=location.hash.slice(1),f=decodeURI(d);document.querySelector(".main").innerHTML="",d?fetch("./post/"+f+".md",{headers:{"content-type":"text/plain;charset=UTF-8"}}).then(function(g){return g.text()}).then(function(g){document.title=f,document.querySelector(".header_title").innerHTML=f,document.querySelector(".main").innerHTML=marked(g)}).catch(function(g){console.error("loading error:",g),c.index()}):this.index()}},{key:"start",value:function(){var d=_asyncToGenerator(regeneratorRuntime.mark(function f(){return regeneratorRuntime.wrap(function(h){for(;;)switch(h.prev=h.next){case 0:return h.next=2,this.init();case 2:this.render();case 3:case"end":return h.stop();}},f,this)}));return function(){return d.apply(this,arguments)}}()}]),a}(),b=new eleCBlog({configpath:"./config.json",articlelists:"./post/lists.json"});b.start();
+"use strict";
+
+function _instanceof(left, right) { if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) { return !!right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+
+function _classCallCheck(instance, Constructor) { if (!_instanceof(instance, Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var eleCBlog = /*#__PURE__*/function () {
+  function eleCBlog(_ref) {
+    var configpath = _ref.configpath,
+        articlelists = _ref.articlelists;
+
+    _classCallCheck(this, eleCBlog);
+
+    _defineProperty(this, "_configpath", "./config.json");
+
+    _defineProperty(this, "_articlelists", "./post/lists.json");
+
+    _defineProperty(this, "_config", null);
+
+    _defineProperty(this, "_atlist", null);
+
+    configpath ? this._configpath = configpath : null;
+    articlelists ? this._articlelists = articlelists : null;
+  }
+
+  _createClass(eleCBlog, [{
+    key: "init",
+    value: async function init() {
+      var _this = this;
+
+      await fetch(this._configpath, {
+        headers: {
+          'content-type': 'application/json;charset=UTF-8'
+        }
+      }).then(function (t) {
+        return t.json();
+      }).then(function (conf) {
+        _this._config = conf;
+        document.querySelector('.footer').innerHTML = "";
+        var footul = document.createElement("ul");
+        footul.className = "footer_ul";
+
+        for (var ft in conf.footer) {
+          var footli = document.createElement("li");
+          footli.className = 'footer_li';
+          footli.innerHTML = "<a class='footer_a' href=\"".concat(conf.footer[ft], "\">").concat(ft, "</a>");
+          footul.appendChild(footli);
+        }
+
+        document.querySelector('.footer').appendChild(footul);
+      }).catch(function (e) {
+        console.error(e);
+        document.querySelector('main').innerHTML('init data error, check the new version <a href="https://github.com/elecV2/eleCBlog">eleCBlog</a>');
+      });
+      await fetch(this._articlelists, {
+        headers: {
+          'content-type': 'application/json;charset=UTF-8'
+        }
+      }).then(function (t) {
+        return t.json();
+      }).then(function (conf) {
+        _this._atlist = conf;
+      }).catch(function (e) {
+        console.error(e);
+        document.querySelector('main').innerHTML('init data error, check the new version <a href="https://github.com/elecV2/eleCBlog">eleCBlog</a>');
+      });
+    }
+  }, {
+    key: "index",
+    value: function index() {
+      if (this._config.header.image) {
+        document.querySelector(".header").style.background = "url(".concat(this._config.header.image, ")");
+      }
+
+      document.title = this._config.header.title;
+      document.querySelector(".header_title").innerHTML = this._config.header.title;
+      var listul = document.createElement("ul");
+      listul.className = 'articlelists';
+
+      this._atlist.forEach(function (li) {
+        var listli = document.createElement("li");
+        listli.className = 'articletitle';
+        listli.innerHTML = "<a target=\"_blank\" href=\"/#".concat(encodeURI(li), "\">").concat(li, "</a>");
+        listul.appendChild(listli);
+      });
+
+      document.querySelector('.main').appendChild(listul);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var mdpath = location.hash.slice(1);
+      var mdname = decodeURI(mdpath);
+      document.querySelector('.main').innerHTML = "";
+
+      if (mdpath) {
+        fetch("./post/" + mdname + '.md', {
+          headers: {
+            'content-type': 'text/plain;charset=UTF-8'
+          }
+        }).then(function (res) {
+          return res.text();
+        }).then(function (text) {
+          document.title = mdname;
+          document.querySelector('.header_title').innerHTML = mdname;
+          document.querySelector('.main').innerHTML = marked(text);
+        }).catch(function (err) {
+          console.error("loading error:", err);
+
+          _this2.index();
+        });
+      } else {
+        this.index();
+      }
+    }
+  }, {
+    key: "start",
+    value: async function start() {
+      await this.init();
+      this.render();
+    }
+  }]);
+
+  return eleCBlog;
+}();
+
+var b = new eleCBlog({
+  configpath: "./config.json",
+  articlelists: "./post/lists.json"
+});
+b.start();

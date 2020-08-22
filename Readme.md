@@ -4,7 +4,7 @@
 
 ## 基本原理
 
-文章获取是通过 404 重定向到主页，通过 pathname 获取文章名，然后 fectch 获取文章内容（.md）（文章全部为 markdown 格式，放置在 **post** 目录下）获取的内容通过 JS [marked](https://github.com/markedjs/marked) 转化为 html。
+文章获取是通过 url hash 获取文章名，然后 fectch 获取文章内容（.md）（文章全部为 markdown 格式，放置在 **post** 目录下）获取的内容通过 JS [marked](https://github.com/markedjs/marked) 转化为 html。
 
 ## 目录结构
 
@@ -27,9 +27,8 @@
 
 ## 缺点：很多
 
-- 文章内容页面默认返回 404
 - 文章获取是通过 JS fetch 的模式，搜索引擎的收录可能很不好
-- 文章放置在 post 目录，另外如果不在 _lists.json 中添加一下的，首页无法显示
+- 文章放置在 post 目录，另外如果不在 lists.json 中添加一下的，首页无法显示
 - 缺点真的还有很多
 
 ## why

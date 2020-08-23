@@ -10,6 +10,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+// https://babeljs.io/en/repl 转换工具
 var eleCBlog = /*#__PURE__*/function () {
   function eleCBlog(_ref) {
     var configpath = _ref.configpath,
@@ -30,6 +31,19 @@ var eleCBlog = /*#__PURE__*/function () {
   }
 
   _createClass(eleCBlog, [{
+    key: "getArtcName",
+    value: function getArtcName() {
+      var mdpath = location.hash.slice(1);
+
+      if (mdpath) {
+        try {
+          return decodeURI(mdpath);
+        } catch (_unused) {
+          return mdpath;
+        }
+      }
+    }
+  }, {
     key: "init",
     value: async function init() {
       var _this = this;
@@ -42,6 +56,11 @@ var eleCBlog = /*#__PURE__*/function () {
         return t.json();
       }).then(function (conf) {
         _this._config = conf;
+
+        if (_this._config.header.image) {
+          document.querySelector(".header").style.background = "url(".concat(_this._config.header.image, ")");
+        }
+
         document.querySelector('.footer').innerHTML = "";
         var footul = document.createElement("ul");
         footul.className = "footer_ul";
@@ -49,7 +68,7 @@ var eleCBlog = /*#__PURE__*/function () {
         for (var ft in conf.footer) {
           var footli = document.createElement("li");
           footli.className = 'footer_li';
-          footli.innerHTML = "<a class='footer_a' href=\"".concat(conf.footer[ft], "\">").concat(ft, "</a>");
+          footli.innerHTML = "<a class='footer_a' target=\"_blank\" href=\"".concat(conf.footer[ft], "\">").concat(ft, "</a>");
           footul.appendChild(footli);
         }
 
@@ -73,20 +92,24 @@ var eleCBlog = /*#__PURE__*/function () {
     }
   }, {
     key: "index",
-    value: function index() {
-      if (this._config.header.image) {
-        document.querySelector(".header").style.background = "url(".concat(this._config.header.image, ")");
+    value: function index(status) {
+      document.title = this._config.header.title;
+      document.querySelector('.main').innerHTML = "";
+      document.querySelector(".header_title").innerHTML = this._config.header.title;
+
+      if (status === 404) {
+        var div = document.createElement("div");
+        div.innerHTML = "404 - \u300A".concat(this.getArtcName(), "\u300B \u76F8\u5173\u6587\u7AE0\u5DF2\u4E0D\u5B58\u5728<br><br>\u6700\u65B0\u6587\u7AE0\u5217\u8868\uFF1A");
+        document.querySelector('.main').appendChild(div);
       }
 
-      document.title = this._config.header.title;
-      document.querySelector(".header_title").innerHTML = this._config.header.title;
       var listul = document.createElement("ul");
       listul.className = 'articlelists';
 
       this._atlist.forEach(function (li) {
         var listli = document.createElement("li");
         listli.className = 'articletitle';
-        listli.innerHTML = "<a target=\"_blank\" href=\"/#".concat(encodeURI(li), "\">").concat(li, "</a>");
+        listli.innerHTML = "<a target=\"_blank\" href=\"./#".concat(encodeURI(li), "\">").concat(li, "</a>");
         listul.appendChild(listli);
       });
 
@@ -97,21 +120,26 @@ var eleCBlog = /*#__PURE__*/function () {
     value: function render() {
       var _this2 = this;
 
-      var mdpath = location.hash.slice(1);
-      var mdname = decodeURI(mdpath);
-      document.querySelector('.main').innerHTML = "";
+      var mdname = this.getArtcName();
 
-      if (mdpath) {
+      if (mdname) {
+        document.querySelector('.main').innerHTML = "正在获取文章内容...";
         fetch("./post/" + mdname + '.md', {
           headers: {
             'content-type': 'text/plain;charset=UTF-8'
           }
         }).then(function (res) {
-          return res.text();
-        }).then(function (text) {
-          document.title = mdname;
-          document.querySelector('.header_title').innerHTML = mdname;
-          document.querySelector('.main').innerHTML = marked(text);
+          if (res.status === 200) {
+            res.text().then(function (text) {
+              document.title = mdname;
+              document.querySelector('.header_title').innerHTML = mdname;
+              document.querySelector('.main').innerHTML = marked(text);
+            });
+          } else {
+            console.log(mdname, '文章并不存在');
+
+            _this2.index(404);
+          }
         }).catch(function (err) {
           console.error("loading error:", err);
 

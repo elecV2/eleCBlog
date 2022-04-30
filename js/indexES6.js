@@ -1,14 +1,11 @@
 // https://babeljs.io/en/repl 转换工具
 class eleCBlog {
-  _configpath = "./config.json";
-  _articlelists = "./post/lists.json";
-
-  _config = null;
-  _atlist = null;
-
   constructor({ configpath, articlelists }){
-    configpath ? this._configpath = configpath : null;
-    articlelists ? this._articlelists = articlelists : null;
+    this._configpath = configpath || "./config.json";
+    this._articlelists = articlelists || "./post/lists.json";
+
+    this._config = null;
+    this._atlist = null;
   }
 
   getArtcName(){
@@ -74,7 +71,7 @@ class eleCBlog {
     this._atlist.forEach(li=>{
       let listli = document.createElement("li");
       listli.className = 'articletitle';
-      listli.innerHTML = `<a target="_blank" href="./#${encodeURI(li)}">${li}</a>`;
+      listli.innerHTML = `<a href="#${encodeURI(li)}">${li}</a>`;
       listul.appendChild(listli);
     })
     document.querySelector('.main').appendChild(listul);
@@ -119,3 +116,9 @@ let b = new eleCBlog({
   articlelists: "./post/lists.json",
 });
 b.start();
+
+/***** hashchange ******/
+addEventListener('hashchange', event => {
+  b.render();
+});
+/***** hashchange end */

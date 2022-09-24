@@ -2,14 +2,17 @@
 <html>
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="var(--main-bk)">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" type="text/css" href="./css/index.css">
   <link rel="stylesheet" type="text/css" href="./css/markdownhere.css">
-  <title>eleCBlog</title>
+  <title>eleCBlog - simple markdown blog</title>
 </head>
 <body>
   <header class="header">
     <h2 class="header_title">{{ title }}</h2>
+    <span class="header_date"></span>
   </header>
   <div class="main">
     {{ main }}

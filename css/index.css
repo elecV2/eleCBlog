@@ -5,6 +5,7 @@ html, body {
   --main-sd: #A8A8A8;
   --main-link: #0047AB;
   background: var(--main-bk);
+  font-family: 'Microsoft YaHei', -apple-system, 'Segoe UI', 'PingFang SC', Helvetica, Arial;
 }
 
 a {
@@ -13,7 +14,9 @@ a {
 }
 
 img {
+  display: flex;
   max-width: 100%;
+  margin: auto;
 }
 
 .header, .main, .footer {
@@ -32,6 +35,12 @@ img {
   color: #665757;
   font-size: 32px;
   border: none;
+}
+.header_date {
+  position: absolute;
+  right: 20px;
+  margin-top: 3px;
+  color: var(--main-link);
 }
 
 .main {

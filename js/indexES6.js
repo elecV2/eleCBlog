@@ -1,4 +1,4 @@
-// https://babeljs.io/en/repl 转换工具
+// https://github.com/elecV2/eleCBlog
 class eleCBlog {
   constructor({ configpath, articlelists }){
     this._configpath = configpath || "./config.json";
@@ -6,6 +6,7 @@ class eleCBlog {
 
     this._config = null;
     this._atlist = null;
+    this.tzoffset = (new Date()).getTimezoneOffset() * 60000;
   }
 
   getArtcName(){
@@ -22,7 +23,7 @@ class eleCBlog {
   async init(){
     await fetch(this._configpath, {
       headers: {
-        'content-type': 'application/json;charset=UTF-8'
+        'Accept': 'application/json, */*;q=0.8'
       }
     }).then(t=>t.json()).then(conf=>{
       this._config = conf;
@@ -46,7 +47,7 @@ class eleCBlog {
 
     await fetch(this._articlelists, {
       headers: {
-        'content-type': 'application/json;charset=UTF-8'
+        'Accept': 'application/json, */*;q=0.8'
       }
     }).then(t=>t.json()).then(conf=>{
       this._atlist = conf;
@@ -59,6 +60,7 @@ class eleCBlog {
   index(status){
     document.title = this._config.header.title;
     document.querySelector('.main').innerHTML = "";
+    document.querySelector('.header_date').innerText = "";
     document.querySelector(".header_title").innerHTML = this._config.header.title;
 
     if (status === 404) {
@@ -83,15 +85,17 @@ class eleCBlog {
       document.querySelector('.main').innerHTML = "正在获取文章内容...";
       fetch("./post/" + mdname + '.md', {
         headers: {
-          'content-type': 'text/plain;charset=UTF-8'
+          'Accept': 'text/plain, */*;q=0.8'
         }
       }).then(res=>{
         if (res.status === 200) {
           res.text().then(text=>{
             document.title = mdname;
-            document.querySelector('.header_title').innerHTML = mdname;
+            document.querySelector('.header_title').innerText = mdname;
             document.querySelector('.main').innerHTML = marked(text);
           })
+          const last_modi = res.headers.get('Last-Modified');
+          document.querySelector('.header_date').innerText = last_modi ? '最近修改：' + new Date(Date.parse(last_modi) - this.tzoffset).toISOString().slice(0, -5).replace('T', ' ') : '';
         } else {
           console.log(mdname, '文章并不存在')
           this.index(404)
